@@ -1,0 +1,32 @@
+#include <iostream>
+#include <iomanip>
+
+int main() {
+    int option;
+    double temperature;
+
+    // Введення параметрів
+    std::cout << "Виберіть варіант перетворення (1 - з Цельсія у Фаренгейт, 2 - з Фаренгейта у Цельсій): ";
+    std::cin >> option;
+    std::cout << "Введіть температуру: ";
+    std::cin >> temperature;
+
+    // Перевірка на значення нижче абсолютного нуля
+    if ((option == 1 && temperature < -273.15) || (option == 2 && temperature < -459.67)) {
+        std::cout << "Занадто холодно для підрахунку!" << std::endl;
+    } else {
+        std::cout << std::fixed << std::setprecision(2);
+
+        if (option == 1) {  // Перетворення з Цельсія у Фаренгейт
+            double fahrenheit = temperature * 9.0 / 5.0 + 32;
+            std::cout << "Температура у Фаренгейтах: " << fahrenheit << std::endl;
+        } else if (option == 2) {  // Перетворення з Фаренгейта у Цельсій
+            double celsius = (temperature - 32) * 5.0 / 9.0;
+            std::cout << "Температура у Цельсіях: " << celsius << std::endl;
+        } else {
+            std::cout << "Неправильний вибір варіанту!" << std::endl;
+        }
+    }
+
+    return 0;
+}
