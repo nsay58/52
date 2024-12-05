@@ -1,0 +1,123 @@
+#include <iostream>
+#include <stack>
+#include <string>
+#include <cmath>
+#include <cctype>
+#include <sstream>
+#include <stdexcept>
+#include <vector>
+
+using namespace std;
+
+// Функція для обчислення факторіалу
+int factorial(int n) {
+    if (n < 0) throw invalid_argument("Факторіал від'ємного числа не визначений");
+    int result = 1;
+    for (int i = 2; i <= n; ++i) {
+        result *= i;
+    }
+    return result;
+}
+
+// Функція для визначення пріоритету оператора
+int precedence(char op) {
+    if (op == '+' || op == '-') return 1;
+    if (op == '*' || op == '/') return 2;
+    if (op == '!') return 3; // Факторіал має найвищий пріоритет
+    return 0;
+}
+
+// Конвертація інфіксної нотації у РПН
+vector<string> toRPN(const string& expr) {
+    stack<char> operators;
+    vector<string> output;
+    string number;
+
+    for (size_t i = 0; i < expr.length(); ++i) {
+        char ch = expr[i];
+        
+        if (isdigit(ch)) {
+            number += ch; // Збираємо число
+        } else {
+            if (!number.empty()) {
+                output.push_back(number);
+                number.clear();
+            }
+            
+            if (ch == '(') {
+                operators.push(ch);
+            } else if (ch == ')') {
+                while (!operators.empty() && operators.top() != '(') {
+                    output.push_back(string(1, operators.top()));
+                    operators.pop();
+                }
+                if (!operators.empty()) operators.pop(); // Видаляємо '('
+            } else if (ch == '+' || ch == '-' || ch == '*' || ch == '/' || ch == '!') {
+                while (!operators.empty() && precedence(operators.top()) >= precedence(ch)) {
+                    output.push_back(string(1, operators.top()));
+                    operators.pop();
+                }
+                operators.push(ch);
+            }
+        }
+    }
+    if (!number.empty()) output.push_back(number);
+
+    while (!operators.empty()) {
+        output.push_back(string(1, operators.top()));
+        operators.pop();
+    }
+
+    return output;
+}
+
+// Обчислення виразу у РПН
+double evaluateRPN(const vector<string>& rpn) {
+    stack<double> values;
+
+    for (const auto& token : rpn) {
+        if (isdigit(token[0])) {
+            values.push(stod(token));
+        } else if (token == "+") {
+            double b = values.top(); values.pop();
+            double a = values.top(); values.pop();
+            values.push(a + b);
+        } else if (token == "-") {
+            double b = values.top(); values.pop();
+            double a = values.top(); values.pop();
+            values.push(a - b);
+        } else if (token == "*") {
+            double b = values.top(); values.pop();
+            double a = values.top(); values.pop();
+            values.push(a * b);
+        } else if (token == "/") {
+            double b = values.top(); values.pop();
+            if (b == 0) throw invalid_argument("Ділення на нуль");
+            double a = values.top(); values.pop();
+            values.push(a / b);
+        } else if (token == "!") {
+            int a = static_cast<int>(values.top());
+            values.pop();
+            values.push(factorial(a));
+        }
+    }
+
+    return values.top();
+}
+
+// Головна функція
+int main() {
+    cout << "Введіть математичний вираз: ";
+    string expression;
+    getline(cin, expression);
+
+    try {
+        auto rpn = toRPN(expression);
+        double result = evaluateRPN(rpn);
+        cout << "Результат: " << result << endl;
+    } catch (const exception& e) {
+        cerr << "Помилка: " << e.what() << endl;
+    }
+
+    return 0;
+}
