@@ -1,0 +1,44 @@
+#include <iostream>
+#include <vector>
+#include <cstdlib> // Для rand() і srand()
+#include <ctime>   // Для time()
+#include <algorithm> // Для std::sort
+
+int main() {
+    // Встановлення генератора випадкових чисел
+    std::srand(std::time(0));
+
+    int n;
+
+    // Читання числа n
+    std::cout << "Введіть розмір масиву: ";
+    std::cin >> n;
+
+    if (n <= 0) {
+        std::cerr << "Розмір масиву повинен бути більшим за 0." << std::endl;
+        return 1;
+    }
+
+    // Створення масиву
+    std::vector<int> array(n);
+
+    // Заповнення масиву випадковими числами
+    std::cout << "Масив перед сортуванням: ";
+    for (int i = 0; i < n; ++i) {
+        array[i] = std::rand() % 100; // Випадкове число в діапазоні [0, 99]
+        std::cout << array[i] << " ";
+    }
+    std::cout << std::endl;
+
+    // Сортування масиву
+    std::sort(array.begin(), array.end());
+
+    // Виведення відсортованого масиву
+    std::cout << "Масив після сортування: ";
+    for (int i = 0; i < n; ++i) {
+        std::cout << array[i] << " ";
+    }
+    std::cout << std::endl;
+
+    return 0;
+}
