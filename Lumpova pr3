@@ -40,8 +40,8 @@ struct PerformanceReport {
 };
 int main() {
     Teacher teachers[2] = {
-        {1, "Petrenko V.P.", "Math"},
-        {2, "Tkachuk О.О.", "IT"}
+        {1, "Okhramovych V.P.", "Math"},
+        {2, "Kolos О.О.", "IT"}
     };
 
     Group groups[1] = {
@@ -49,8 +49,8 @@ int main() {
     };
 
     Student students[2] = {
-        {1, "Kovalenko A.А.", 1},
-        {2, "Schevchenko B.I.", 1}
+        {1, "Sulyma A.А.", 1},
+        {2, "Korduk B.I.", 1}
     };
 
     Subject subjects[2] = {
